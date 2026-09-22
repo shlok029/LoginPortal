@@ -1,0 +1,34 @@
+<main class="login-page">
+  <section class="login-panel" aria-labelledby="login-title">
+    <div class="brand-mark" aria-hidden="true">EP</div>
+    <p class="eyebrow">Employee Portal</p>
+    <h1 id="login-title">Welcome back</h1>
+    <p class="intro">Sign in to continue to your workspace.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+      <label for="username">Username</label>
+      <input id="username" type="text" formControlName="username" autocomplete="username" placeholder="Enter your username">
+      <p class="field-error" *ngIf="loginForm.controls.username.touched && loginForm.controls.username.invalid">Username is required.</p>
+
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" autocomplete="current-password" placeholder="Enter your password">
+      <p class="field-error" *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">Password is required.</p>
+
+      <p class="form-error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+
+      <button type="submit" [disabled]="isSubmitting">
+        <span>{{ isSubmitting ? 'Signing in...' : 'Sign in' }}</span>
+        <span aria-hidden="true">&#8594;</span>
+      </button>
+    </form>
+  </section>
+
+  <aside class="login-aside" aria-label="Portal introduction">
+    <div class="aside-content">
+      <p class="aside-kicker">Operations, at a glance</p>
+      <h2>Make every employee interaction count.</h2>
+      <p>One focused place for the people, details, and decisions that keep your team moving.</p>
+    </div>
+    <div class="aside-note">Secure access · Connected workspace</div>
+  </aside>
+</main>

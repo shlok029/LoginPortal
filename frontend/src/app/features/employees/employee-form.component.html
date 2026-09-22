@@ -1,0 +1,38 @@
+<div class="portal-shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">EP</span><div><strong>Employee</strong><span>Portal</span></div></div>
+    <nav aria-label="Main navigation">
+      <a class="nav-item" routerLink="/dashboard"><span aria-hidden="true">&#9632;</span> Dashboard</a>
+      <a class="nav-item active" routerLink="/employees"><span aria-hidden="true">&#9679;</span> Employees</a>
+    </nav>
+    <button class="sidebar-logout" type="button" (click)="logout()"><span aria-hidden="true">&#8592;</span> Logout</button>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <div><p class="eyebrow">Directory</p><h1>{{ isEdit ? 'Edit employee' : 'Add employee' }}</h1></div>
+      <div class="user-menu"><span class="avatar" aria-hidden="true">{{ username?.charAt(0)?.toUpperCase() || 'U' }}</span><span>{{ username || 'User' }}</span><button type="button" (click)="logout()" title="Log out">&#8594;</button></div>
+    </header>
+
+    <section class="form-section">
+      <a class="back-link" routerLink="/employees">&#8592; Back to employees</a>
+      <div class="form-heading"><p class="eyebrow">Employee details</p><h2>{{ isEdit ? 'Update the employee record' : 'Create a new employee record' }}</h2><p>Enter the details below. Required fields are marked with an asterisk.</p></div>
+
+      <div *ngIf="isLoading" class="loading" role="status">Loading employee...</div>
+      <div *ngIf="errorMessage" class="feedback error" role="alert">{{ errorMessage }}</div>
+
+      <form *ngIf="!isLoading" [formGroup]="employeeForm" (ngSubmit)="submit()" novalidate>
+        <div class="form-grid">
+          <div class="field"><label for="employeeCode">Employee Code <span>*</span></label><input id="employeeCode" formControlName="employeeCode" autocomplete="off"><small *ngIf="employeeForm.controls.employeeCode.touched && employeeForm.controls.employeeCode.hasError('required')">Employee code is required.</small></div>
+          <div class="field"><label for="firstName">First Name <span>*</span></label><input id="firstName" formControlName="firstName" autocomplete="given-name"><small *ngIf="employeeForm.controls.firstName.touched && employeeForm.controls.firstName.hasError('required')">First name is required.</small></div>
+          <div class="field"><label for="lastName">Last Name <span>*</span></label><input id="lastName" formControlName="lastName" autocomplete="family-name"><small *ngIf="employeeForm.controls.lastName.touched && employeeForm.controls.lastName.hasError('required')">Last name is required.</small></div>
+          <div class="field"><label for="email">Email <span>*</span></label><input id="email" type="email" formControlName="email" autocomplete="email"><small *ngIf="employeeForm.controls.email.touched && employeeForm.controls.email.invalid">Enter a valid email address.</small></div>
+          <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" formControlName="phone" autocomplete="tel"></div>
+          <div class="field"><label for="department">Department <span>*</span></label><input id="department" formControlName="department"><small *ngIf="employeeForm.controls.department.touched && employeeForm.controls.department.hasError('required')">Department is required.</small></div>
+          <div class="field"><label for="designation">Designation <span>*</span></label><input id="designation" formControlName="designation"><small *ngIf="employeeForm.controls.designation.touched && employeeForm.controls.designation.hasError('required')">Designation is required.</small></div>
+        </div>
+        <div class="form-actions"><a class="cancel-button" routerLink="/employees">Cancel</a><button class="save-button" type="submit" [disabled]="isSaving">{{ isSaving ? 'Saving...' : (isEdit ? 'Save changes' : 'Create employee') }}</button></div>
+      </form>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,12 @@
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+
+# Local secrets and developer-specific configuration
+appsettings.*.local.json
+.secrets/
+
+# .NET user-secrets store
+secrets.json

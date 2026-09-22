@@ -1,0 +1,62 @@
+<div class="portal-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">EP</span>
+      <div><strong>Employee</strong><span>Portal</span></div>
+    </div>
+    <nav aria-label="Main navigation">
+      <a class="nav-item" routerLink="/dashboard" routerLinkActive="active"><span aria-hidden="true">&#9632;</span> Dashboard</a>
+      <a class="nav-item" routerLink="/employees" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><span aria-hidden="true">&#9679;</span> Employees</a>
+    </nav>
+    <button class="sidebar-logout" type="button" (click)="logout()"><span aria-hidden="true">&#8592;</span> Logout</button>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <div><p class="eyebrow">Directory</p><h1>Employees</h1></div>
+      <div class="user-menu">
+        <span class="avatar" aria-hidden="true">{{ username?.charAt(0)?.toUpperCase() || 'U' }}</span>
+        <span>{{ username || 'User' }}</span>
+        <button type="button" (click)="logout()" title="Log out">&#8594;</button>
+      </div>
+    </header>
+
+    <section class="page-intro">
+      <div><p class="eyebrow">People overview</p><h2>Employee directory</h2><p>Manage the people who keep your organization moving.</p></div>
+      <a class="primary-button" routerLink="/employees/add"><span aria-hidden="true">+</span> Add Employee</a>
+    </section>
+
+    <div *ngIf="successMessage" class="feedback success" role="status">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="feedback error" role="alert">{{ errorMessage }} <button type="button" (click)="loadEmployees()">Try again</button></div>
+
+    <section class="directory-panel" aria-labelledby="directory-title">
+      <div class="toolbar">
+        <h2 id="directory-title">All employees <span>{{ filteredEmployees.length }}</span></h2>
+        <label class="search-box">
+          <span aria-hidden="true">&#8981;</span>
+          <input type="search" [(ngModel)]="searchTerm" placeholder="Search employees" aria-label="Search employees">
+        </label>
+      </div>
+
+      <div *ngIf="isLoading" class="loading" role="status">Loading employees...</div>
+      <div *ngIf="!isLoading && !errorMessage && filteredEmployees.length === 0" class="empty-state">No employees match your search.</div>
+      <div *ngIf="!isLoading && filteredEmployees.length > 0" class="table-wrap">
+        <table>
+          <thead><tr><th>Employee Code</th><th>Name</th><th>Email</th><th>Phone</th><th>Department</th><th>Designation</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let employee of filteredEmployees">
+              <td class="code">{{ employee.employeeCode }}</td>
+              <td class="name">{{ employee.firstName }} {{ employee.lastName }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.phone || '—' }}</td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.designation }}</td>
+              <td><span class="status" [class.inactive]="!employee.isActive">{{ employee.isActive ? 'Active' : 'Inactive' }}</span></td>
+              <td><div class="actions"><a [routerLink]="['/employees/edit', employee.id]">Edit</a><button type="button" (click)="deleteEmployee(employee)" [disabled]="deletingId !== null">{{ deletingId === employee.id ? 'Deleting...' : 'Delete' }}</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>

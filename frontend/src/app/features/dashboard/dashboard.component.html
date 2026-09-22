@@ -1,0 +1,80 @@
+<div class="portal-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">EP</span>
+      <div>
+        <strong>Employee</strong>
+        <span>Portal</span>
+      </div>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <a class="nav-item active" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <span aria-hidden="true">&#9632;</span> Dashboard
+      </a>
+      <a class="nav-item" routerLink="/employees" routerLinkActive="active">
+        <span aria-hidden="true">&#9679;</span> Employees
+      </a>
+    </nav>
+
+    <button class="sidebar-logout" type="button" (click)="logout()">
+      <span aria-hidden="true">&#8592;</span> Logout
+    </button>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Overview</p>
+        <h1>Dashboard</h1>
+      </div>
+      <div class="user-menu">
+        <span class="avatar" aria-hidden="true">{{ username?.charAt(0)?.toUpperCase() || 'U' }}</span>
+        <span>{{ username || 'User' }}</span>
+        <button type="button" (click)="logout()" title="Log out">&#8594;</button>
+      </div>
+    </header>
+
+    <section class="welcome">
+      <p class="eyebrow">Employee Portal</p>
+      <h2>Good to see you<span *ngIf="username">, {{ username }}</span>.</h2>
+      <p>Here is the latest snapshot of your employee directory.</p>
+    </section>
+
+    <section class="stats-section" aria-labelledby="stats-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">At a glance</p>
+          <h2 id="stats-title">People overview</h2>
+        </div>
+        <button class="refresh-button" type="button" (click)="loadStats()" [disabled]="isLoading" title="Refresh statistics">&#8635; Refresh</button>
+      </div>
+
+      <div *ngIf="isLoading" class="status-message" role="status">Loading dashboard statistics...</div>
+      <div *ngIf="errorMessage" class="status-message error" role="alert">
+        {{ errorMessage }} <button type="button" (click)="loadStats()">Try again</button>
+      </div>
+
+      <div *ngIf="stats" class="stats-grid">
+        <article class="stat-card total">
+          <span class="stat-icon" aria-hidden="true">&#9673;</span>
+          <p>Total Employees</p>
+          <strong>{{ stats.totalEmployees }}</strong>
+          <span class="stat-note">Across the organization</span>
+        </article>
+        <article class="stat-card active">
+          <span class="stat-icon" aria-hidden="true">&#10003;</span>
+          <p>Active Employees</p>
+          <strong>{{ stats.activeEmployees }}</strong>
+          <span class="stat-note">Currently active</span>
+        </article>
+        <article class="stat-card inactive">
+          <span class="stat-icon" aria-hidden="true">&#8722;</span>
+          <p>Inactive Employees</p>
+          <strong>{{ stats.inactiveEmployees }}</strong>
+          <span class="stat-note">Not currently active</span>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
