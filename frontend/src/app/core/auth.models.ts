@@ -9,6 +9,7 @@ export interface LoginResponse {
   userId: number;
   employeeId: number;
   username: string;
+  role: string;
   accessToken?: string;
   expiresAt?: string;
 }

@@ -16,12 +16,18 @@ export class DashboardComponent {
   private readonly dashboardService = inject(DashboardService);
 
   readonly username = this.getLoggedInUsername();
+  readonly role = this.authService.getRole();
+  readonly isAdmin = this.authService.isAdmin();
   stats: DashboardStats | null = null;
   isLoading = true;
   errorMessage = '';
 
   constructor() {
-    this.loadStats();
+    if (this.isAdmin) {
+      this.loadStats();
+    } else {
+      this.isLoading = false;
+    }
   }
 
   private getLoggedInUsername(): string | null {

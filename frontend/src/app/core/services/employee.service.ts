@@ -17,6 +17,10 @@ export class EmployeeService {
     return this.http.get<Employee>(`${this.endpoint}/${id}`);
   }
 
+  getCurrent(): Observable<Employee> {
+    return this.http.get<Employee>(`${this.endpoint}/me`);
+  }
+
   create(employee: EmployeeFormValue): Observable<Employee> {
     return this.http.post<Employee>(this.endpoint, employee);
   }

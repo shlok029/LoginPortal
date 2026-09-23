@@ -12,8 +12,14 @@
       <a class="nav-item active" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <span aria-hidden="true">&#9632;</span> Dashboard
       </a>
-      <a class="nav-item" routerLink="/employees" routerLinkActive="active">
+      <a *ngIf="isAdmin" class="nav-item" routerLink="/employees" routerLinkActive="active">
         <span aria-hidden="true">&#9679;</span> Employees
+      </a>
+      <a *ngIf="!isAdmin" class="nav-item" routerLink="/profile" routerLinkActive="active">
+        <span aria-hidden="true">&#9679;</span> My Profile
+      </a>
+      <a class="nav-item" routerLink="/change-password" routerLinkActive="active">
+        <span aria-hidden="true">&#9678;</span> Change Password
       </a>
     </nav>
 
@@ -38,10 +44,11 @@
     <section class="welcome">
       <p class="eyebrow">Employee Portal</p>
       <h2>Good to see you<span *ngIf="username">, {{ username }}</span>.</h2>
-      <p>Here is the latest snapshot of your employee directory.</p>
+      <p *ngIf="isAdmin">Here is the latest snapshot of your employee directory.</p>
+      <p *ngIf="!isAdmin">View your profile and account settings from the portal.</p>
     </section>
 
-    <section class="stats-section" aria-labelledby="stats-title">
+    <section *ngIf="isAdmin" class="stats-section" aria-labelledby="stats-title">
       <div class="section-heading">
         <div>
           <p class="eyebrow">At a glance</p>

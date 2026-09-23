@@ -7,6 +7,7 @@
     <nav aria-label="Main navigation">
       <a class="nav-item" routerLink="/dashboard" routerLinkActive="active"><span aria-hidden="true">&#9632;</span> Dashboard</a>
       <a class="nav-item" routerLink="/employees" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><span aria-hidden="true">&#9679;</span> Employees</a>
+      <a class="nav-item" routerLink="/change-password" routerLinkActive="active"><span aria-hidden="true">&#9678;</span> Change Password</a>
     </nav>
     <button class="sidebar-logout" type="button" (click)="logout()"><span aria-hidden="true">&#8592;</span> Logout</button>
   </aside>
@@ -52,7 +53,7 @@
               <td>{{ employee.department }}</td>
               <td>{{ employee.designation }}</td>
               <td><span class="status" [class.inactive]="!employee.isActive">{{ employee.isActive ? 'Active' : 'Inactive' }}</span></td>
-              <td><div class="actions"><a [routerLink]="['/employees/edit', employee.id]">Edit</a><button type="button" (click)="deleteEmployee(employee)" [disabled]="deletingId !== null">{{ deletingId === employee.id ? 'Deleting...' : 'Delete' }}</button></div></td>
+              <td><div class="actions"><a [routerLink]="['/employees/view', employee.id]">View</a><a [routerLink]="['/employees/edit', employee.id]">Edit</a><button type="button" (click)="deleteEmployee(employee)" [disabled]="deletingId !== null">{{ deletingId === employee.id ? 'Deleting...' : 'Delete' }}</button></div></td>
             </tr>
           </tbody>
         </table>

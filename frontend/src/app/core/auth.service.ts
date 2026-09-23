@@ -22,6 +22,7 @@ export class AuthService {
             userId: response.userId,
             employeeId: response.employeeId,
             username: response.username,
+            role: response.role,
             expiresAt: response.expiresAt
           }));
         }
@@ -36,6 +37,19 @@ export class AuthService {
   isAuthenticated(): boolean {
     return this.getAccessToken() !== null;
   }
+
+  getRole(): string | null {
+    const user = localStorage.getItem(loginUserKey);
+    if (!user) return null;
+    try {
+      return JSON.parse(user).role ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  isAdmin(): boolean { return this.getRole() === 'Admin'; }
+  isEmployee(): boolean { return this.getRole() === 'Employee'; }
 
   logout(): void {
     localStorage.removeItem(accessTokenKey);

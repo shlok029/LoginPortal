@@ -22,18 +22,19 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(employee => employee.Department).IsRequired().HasMaxLength(100);
             entity.Property(employee => employee.Designation).IsRequired().HasMaxLength(100);
         });
-
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(user => user.Id);
             entity.HasIndex(user => user.Username).IsUnique();
             entity.Property(user => user.Username).IsRequired().HasMaxLength(100);
             entity.Property(user => user.PasswordHash).IsRequired();
+            entity.Property(user => user.Role).IsRequired().HasMaxLength(20);
 
             entity.HasOne(user => user.Employee)
                 .WithOne(employee => employee.User)
                 .HasForeignKey<User>(user => user.EmployeeId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
     }
 }

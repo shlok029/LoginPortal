@@ -1,5 +1,6 @@
 using EmployeePortal.Api.Data;
 using EmployeePortal.Api.DTOs;
+using EmployeePortal.Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,7 @@ namespace EmployeePortal.Api.Controllers;
 
 [ApiController]
 [Route("api/dashboard")]
-[Authorize]
+[Authorize(Roles = UserRoles.Admin)]
 public class DashboardController(AppDbContext db) : ControllerBase
 {
     [HttpGet("stats")]

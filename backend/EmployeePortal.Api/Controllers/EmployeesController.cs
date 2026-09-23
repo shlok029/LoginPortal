@@ -13,6 +13,7 @@ namespace EmployeePortal.Api.Controllers;
 public class EmployeesController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<ActionResult<IEnumerable<EmployeeResponseDto>>> GetAll()
     {
         var employees = await db.Employees.AsNoTracking().OrderBy(item => item.Id).ToListAsync();
@@ -20,6 +21,7 @@ public class EmployeesController(AppDbContext db) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<ActionResult<EmployeeResponseDto>> GetById(int id)
     {
         var employee = await db.Employees.AsNoTracking().SingleOrDefaultAsync(item => item.Id == id);
@@ -27,6 +29,7 @@ public class EmployeesController(AppDbContext db) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<ActionResult<EmployeeResponseDto>> Create(EmployeeCreateDto request)
     {
         if (await db.Employees.AnyAsync(item => item.EmployeeCode == request.EmployeeCode))
@@ -55,6 +58,7 @@ public class EmployeesController(AppDbContext db) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<ActionResult<EmployeeResponseDto>> Update(int id, EmployeeUpdateDto request)
     {
         var employee = await db.Employees.SingleOrDefaultAsync(item => item.Id == id);
@@ -82,6 +86,7 @@ public class EmployeesController(AppDbContext db) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = UserRoles.Admin)]
     public async Task<IActionResult> Delete(int id)
     {
         var employee = await db.Employees.Include(item => item.User).SingleOrDefaultAsync(item => item.Id == id);
@@ -97,6 +102,19 @@ public class EmployeesController(AppDbContext db) : ControllerBase
         db.Employees.Remove(employee);
         await db.SaveChangesAsync();
         return NoContent();
+    }
+
+    [HttpGet("me")]
+    public async Task<ActionResult<EmployeeResponseDto>> GetCurrentEmployee()
+    {
+        var employeeIdClaim = User.FindFirst("employeeId")?.Value;
+        if (!int.TryParse(employeeIdClaim, out var employeeId))
+        {
+            return Unauthorized();
+        }
+
+        var employee = await db.Employees.AsNoTracking().SingleOrDefaultAsync(item => item.Id == employeeId);
+        return employee is null ? NotFound() : Ok(ToResponse(employee));
     }
 
     private static EmployeeResponseDto ToResponse(Employee employee) => new()
